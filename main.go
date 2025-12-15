@@ -115,5 +115,5 @@ func main() {
 		fmt.Printf("Method: %s, Path: %s, Handler: %s\n", route.Method, route.Path, route.Name)
 	}
 
-	e.Start(":" + "1234") // TODO: get port from environment variable
+	e.Start(":" + config.Server.Port)
 }
