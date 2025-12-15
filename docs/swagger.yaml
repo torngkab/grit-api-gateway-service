@@ -1,0 +1,351 @@
+definitions:
+  createaccount.CreateUserRequest:
+    properties:
+      password:
+        type: string
+      referral_code:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  createaccount.CreateUserResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  createaccount.CreateUserResponseError:
+    properties:
+      error:
+        type: string
+    type: object
+  deposit.DepositRequest:
+    properties:
+      account_id:
+        type: string
+      amount:
+        minimum: 0
+        type: number
+      note:
+        type: string
+    required:
+    - account_id
+    - amount
+    type: object
+  deposit.DepositResponse:
+    properties:
+      transaction_id:
+        type: string
+    type: object
+  deposit.DepositResponseError:
+    properties:
+      error:
+        type: string
+    type: object
+  getbalance.GetBalanceRequest:
+    properties:
+      account_id:
+        type: string
+    required:
+    - account_id
+    type: object
+  getbalance.GetBalanceResponse:
+    properties:
+      balance:
+        type: number
+      latest_updated_at:
+        type: string
+    type: object
+  getbalance.GetBalanceResponseError:
+    properties:
+      error:
+        type: string
+    type: object
+  gettransactions.GetTransactionsRequest:
+    properties:
+      accountIds:
+        items:
+          type: string
+        type: array
+      limit:
+        default: 10
+        type: integer
+      page:
+        default: 1
+        type: integer
+    required:
+    - limit
+    - page
+    type: object
+  gettransactions.GetTransactionsResponse:
+    properties:
+      limit:
+        type: integer
+      page:
+        type: integer
+      total:
+        type: integer
+      transactions:
+        items:
+          $ref: '#/definitions/gettransactions.TransactionModel'
+        type: array
+    type: object
+  gettransactions.GetTransactionsResponseError:
+    properties:
+      error:
+        type: string
+    type: object
+  gettransactions.TransactionModel:
+    properties:
+      account_id:
+        type: string
+      amount:
+        type: number
+      created_at:
+        type: string
+      note:
+        type: string
+      transaction_id:
+        type: string
+      type:
+        type: string
+    type: object
+  transfer.TransferRequest:
+    properties:
+      amount:
+        minimum: 0
+        type: number
+      from_account_id:
+        type: string
+      note:
+        type: string
+      to_account_id:
+        type: string
+    required:
+    - amount
+    - from_account_id
+    - to_account_id
+    type: object
+  transfer.TransferResponse:
+    properties:
+      transaction_id:
+        type: string
+    type: object
+  transfer.TransferResponseError:
+    properties:
+      error:
+        type: string
+    type: object
+  withdraw.WithdrawRequest:
+    properties:
+      account_id:
+        type: string
+      amount:
+        minimum: 0
+        type: number
+      note:
+        type: string
+    required:
+    - account_id
+    - amount
+    type: object
+  withdraw.WithdrawResponse:
+    properties:
+      transaction_id:
+        type: string
+    type: object
+  withdraw.WithdrawResponseError:
+    properties:
+      error:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API Gateway Service
+  termsOfService: http://swagger.io/terms/
+  title: Grit Challenge - API Gateway Service
+  version: "1.0"
+paths:
+  /api/v1/accounts/:id/balance:
+    get:
+      consumes:
+      - application/json
+      description: Get the balance of an account
+      parameters:
+      - description: Get balance request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/getbalance.GetBalanceRequest'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/getbalance.GetBalanceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/getbalance.GetBalanceResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/getbalance.GetBalanceResponseError'
+      summary: Get Balance
+      tags:
+      - accounts
+  /api/v1/accounts/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: Create user request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/createaccount.CreateUserRequest'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/createaccount.CreateUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/createaccount.CreateUserResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/createaccount.CreateUserResponseError'
+      summary: Create User
+      tags:
+      - accounts
+  /api/v1/deposit:
+    post:
+      consumes:
+      - application/json
+      description: Deposit money
+      parameters:
+      - description: Deposit request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/deposit.DepositRequest'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/deposit.DepositResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/deposit.DepositResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/deposit.DepositResponseError'
+      summary: Deposit
+      tags:
+      - deposit
+  /api/v1/transactions:
+    get:
+      consumes:
+      - application/json
+      description: Get the transactions of an account
+      parameters:
+      - description: Get transactions request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/gettransactions.GetTransactionsRequest'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/gettransactions.GetTransactionsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gettransactions.GetTransactionsResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gettransactions.GetTransactionsResponseError'
+      summary: Get Transactions
+      tags:
+      - accounts
+  /api/v1/transfer:
+    post:
+      consumes:
+      - application/json
+      description: Transfer money
+      parameters:
+      - description: Transfer request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/transfer.TransferRequest'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/transfer.TransferResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transfer.TransferResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/transfer.TransferResponseError'
+      summary: Transfer
+      tags:
+      - transfer
+  /api/v1/withdraw:
+    post:
+      consumes:
+      - application/json
+      description: Withdraw money
+      parameters:
+      - description: Withdraw request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/withdraw.WithdrawRequest'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/withdraw.WithdrawResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/withdraw.WithdrawResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/withdraw.WithdrawResponseError'
+      summary: Withdraw
+      tags:
+      - withdraw
+swagger: "2.0"
