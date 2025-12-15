@@ -13,10 +13,10 @@ type GetTransactionsRequest struct {
 }
 
 type GetTransactionsResponse struct {
-	Transactions []*TransactionModel `json:"transactions"`
-	Total        int32               `json:"total"`
-	Page         int32               `json:"page"`
-	Limit        int32               `json:"limit"`
+	Transactions []TransactionModel `json:"transactions"`
+	Total        int32              `json:"total"`
+	Page         int32              `json:"page"`
+	Limit        int32              `json:"limit"`
 }
 
 type GetTransactionsResponseError struct {
@@ -83,21 +83,21 @@ func (h *Handler) GetTransactions(c echo.Context) error {
 		})
 	}
 
-	// convert transactions to transaction models
-	transactionsPb := make([]*TransactionModel, len(getTransactionsResponse.Transactions))
-	for i, transaction := range getTransactionsResponse.Transactions {
-		transactionsPb[i] = &TransactionModel{
-			TransactionId: transaction.TransactionId,
-			AccountId:     transaction.AccountId,
-			Type:          transaction.Type,
-			Amount:        float64(transaction.Amount),
-			Note:          transaction.Note,
-			CreatedAt:     transaction.CreatedAt,
+	// convert protobuf transactions to TransactionModel
+	transactions := make([]TransactionModel, len(getTransactionsResponse.GetTransactions()))
+	for i, pbTx := range getTransactionsResponse.GetTransactions() {
+		transactions[i] = TransactionModel{
+			TransactionId: pbTx.GetTransactionId(),
+			AccountId:     pbTx.GetAccountId(),
+			Type:          pbTx.GetType(),
+			Amount:        float64(pbTx.GetAmount()),
+			Note:          pbTx.GetNote(),
+			CreatedAt:     pbTx.GetCreatedAt(),
 		}
 	}
 
 	return c.JSON(http.StatusOK, GetTransactionsResponse{
-		Transactions: transactionsPb,
+		Transactions: transactions,
 		Total:        getTransactionsResponse.Total,
 		Page:         getTransactionsResponse.Page,
 		Limit:        getTransactionsResponse.Limit,
