@@ -11,6 +11,8 @@ import (
 	"github.com/torngkab/grit-api-gateway-service/app/withdraw"
 	"github.com/torngkab/grit-api-gateway-service/app/ws"
 	"github.com/torngkab/grit-api-gateway-service/config"
+	_ "github.com/torngkab/grit-api-gateway-service/docs"
+
 	gatewayMiddleware "github.com/torngkab/grit-api-gateway-service/middleware"
 
 	"github.com/go-playground/validator/v10"
