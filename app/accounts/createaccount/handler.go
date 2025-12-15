@@ -38,7 +38,7 @@ func NewHandler(svc CreateUserService) *Handler {
 //	@Success		200	{object}	CreateUserResponse	"Success"
 //	@Failure		400	{object}	CreateUserResponseError	"Bad Request"
 //	@Failure		500	{object}	CreateUserResponseError	"Internal Server Error"
-//	@Router			/api/v1/accounts/create [post]
+//	@Router			/api/v1/accounts [post]
 //	@Param			request	body		CreateUserRequest	true	"Create user request"
 func (h *Handler) CreateUser(c echo.Context) error {
 	var request CreateUserRequest

@@ -168,6 +168,36 @@ info:
   title: Grit Challenge - API Gateway Service
   version: "1.0"
 paths:
+  /api/v1/accounts:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: Create user request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/createaccount.CreateUserRequest'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/createaccount.CreateUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/createaccount.CreateUserResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/createaccount.CreateUserResponseError'
+      summary: Create User
+      tags:
+      - accounts
   /api/v1/accounts/:id/balance:
     get:
       consumes:
@@ -196,36 +226,6 @@ paths:
           schema:
             $ref: '#/definitions/getbalance.GetBalanceResponseError'
       summary: Get Balance
-      tags:
-      - accounts
-  /api/v1/accounts/create:
-    post:
-      consumes:
-      - application/json
-      description: Create a new user
-      parameters:
-      - description: Create user request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/createaccount.CreateUserRequest'
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: '#/definitions/createaccount.CreateUserResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/createaccount.CreateUserResponseError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/createaccount.CreateUserResponseError'
-      summary: Create User
       tags:
       - accounts
   /api/v1/deposit:
